@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import useGiphyApi from '../utils/useGiphyApi';
 import GiphyResults from './GiphyResults';
 
 const deFaultLimit = 10;
 
-const GiphySearch = ({ initialQuery }) => {
+function GiphySearch({ initialQuery }) {
 	const { error, loading, data, pagination, setQuery } = useGiphyApi({
 		q: initialQuery,
 		limit: deFaultLimit
+	});
+	const searchInputRef = useRef(null);
+	useEffect(() => {
+		searchInputRef.current.focus();
 	});
 	const onSubmit = (ev) => {
 		ev.preventDefault();
@@ -27,7 +31,7 @@ const GiphySearch = ({ initialQuery }) => {
 			<section>
 				<form style={{marginBottom: '10px'}} onSubmit={onSubmit}>
 					Enter a word or phrase:
-					<input type="text" name="query" defaultValue={initialQuery} />
+					<input type="text" name="query" ref={searchInputRef} defaultValue={initialQuery} />
 					<button type="submit">Search</button>
 				</form>
 			</section>
