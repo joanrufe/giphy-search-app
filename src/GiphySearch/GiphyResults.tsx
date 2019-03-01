@@ -1,7 +1,6 @@
 import React from 'react';
 import Pagination from 'antd/lib/pagination';
 import Card from 'antd/lib/card';
-// import Anchor from 'antd/lib/anchor';
 import { objectToQueryString } from '../utils/useGiphyApi'
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
@@ -30,31 +29,33 @@ function GiphyResults({ data, pagination, pageChange, query } : ResultsProps) {
 			<div className="items">
 				{data.map((item : any) => <GiphyItem key={item.id} {...item} />)}
 			</div>
-			<Pagination
-				current={currentIndex}
-				key={currentIndex}
-				total={total_count}
-				pageSize={count}
-				showQuickJumper
-				itemRender={(page, type) => {
-					if (type === 'jump-prev') {
-						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<<'}</Link>;
-					}
-					if (type === 'jump-next') {
-						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>>'}</Link>;
-					}
-					if (type === 'prev') {
-						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<'}</Link>;
-					}
-					if (type === 'next') {
-						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>'}</Link>;
-					}
-					return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{page}</Link>;
-				}}
-				onChange={(page) => {
-					pageChange(page*count - count)
-				}}
-			/>
+			<div className="footer">
+				<Pagination
+					current={currentIndex}
+					key={currentIndex}
+					total={total_count}
+					pageSize={count}
+					showQuickJumper
+					itemRender={(page, type) => {
+						if (type === 'jump-prev') {
+							return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<<'}</Link>;
+						}
+						if (type === 'jump-next') {
+							return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>>'}</Link>;
+						}
+						if (type === 'prev') {
+							return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<'}</Link>;
+						}
+						if (type === 'next') {
+							return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>'}</Link>;
+						}
+						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{page}</Link>;
+					}}
+					onChange={(page) => {
+						pageChange(page*count - count)
+					}}
+				/>
+			</div>
 		</>
 	);
 }
@@ -69,17 +70,13 @@ function GiphyItem({ title, ...extra } : ItemProps) {
 	const { url, width, height } = extra.images.fixed_width;
 
 	return (
-		<a href={url} target="_blank">
-			<Card
-				hoverable
-				style={{ width: 240, margin: '20px auto' }}
-				cover={
-					<img width={width} height={height} src={url} alt={title} />
-				}
-			>
-				<Card.Meta title={title} />
-			</Card>
-		</a>
+		<Card
+			style={{ width: 240, margin: '20px auto', height: 'fit-content' }}
+			cover={
+				<img width={width} height={height} src={url} alt={title} />
+			}>
+			<Card.Meta title={<a href={url} target="_blank">{title}</a>}/>
+		</Card>
 	);
 }
 

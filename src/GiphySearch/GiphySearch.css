@@ -1,0 +1,20 @@
+.items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  margin: auto 20px;
+}
+
+.items img {
+  width: 100%;
+  height: auto;
+}
+
+.items a {
+  display: block;
+}
+
+.footer {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}

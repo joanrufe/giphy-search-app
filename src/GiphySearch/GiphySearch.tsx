@@ -6,6 +6,7 @@ import Form from 'antd/lib/form/';
 import Layout from 'antd/lib/layout';
 import {parse} from 'query-string';
 import QueryModel from '../utils/QueryModel'
+import './GiphySearch.css';
 
 const {
   Header, Content,
@@ -47,9 +48,9 @@ function GiphySearch({ location = { search: ''} } = {}) {
 					<a href={`${window.location.origin}${window.location.pathname}`}>Giphy Search App</a>
 				</h1>
 			</Header>
-			<Content style={{margin: '20px auto 20px auto'}}>
-				<Form onSubmit={onSubmit}>
-					Enter a word or phrase:
+			<Content style={{width: '100%'}}>
+				<Form onSubmit={onSubmit} style={{margin: '20px auto 20px auto', maxWidth: '250px'}}>
+					<p>Enter a word or phrase:</p>
 					<Form.Item>
 						<Search
 							autoFocus
@@ -70,7 +71,7 @@ function GiphySearch({ location = { search: ''} } = {}) {
 				{
 					!loading &&!error && (
 						<div>
-							Total Items <span>{pagination.total_count}</span>
+							<p style={{textAlign: 'center'}}>Total Items <span>{pagination.total_count}</span></p>
 							<GiphyResults data={data} pagination={pagination} pageChange={pageChange} query={query}/>
 						</div>
 					)
