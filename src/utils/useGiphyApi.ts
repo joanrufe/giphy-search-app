@@ -18,7 +18,6 @@ const buildUrl = (query: QueryModel) => {
 		...query,
 		api_key: 'dc6zaTOxFJmzC'
 	});
-	console.log(query)
 	return `${baseUrl}${searchRoute}${encodedQuery}`;
 };
 
@@ -32,11 +31,6 @@ export function objectToQueryString(obj: QueryModel | any) {
 	}, '');
 }
 
-/**
- * Use giphyAPi with an optional initialQuery
- *
- * @param {Query} initialQuery 
- */
 export default function useGiphyApi(initialQuery: QueryModel) {
 	const [ error, setError ] = useState(null);
 	const [ loading, setLoading ] = useState(true);
@@ -63,7 +57,6 @@ export default function useGiphyApi(initialQuery: QueryModel) {
 				try {
 					response = await fetch(buildUrl(query));
 					data = await response.json();
-					console.log(data.pagination);
 				} catch (error) {
 					setError(error);
 				}

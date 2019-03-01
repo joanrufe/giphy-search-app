@@ -1,7 +1,7 @@
 import React from 'react';
 import Pagination from 'antd/lib/pagination';
 import Card from 'antd/lib/card';
-import Anchor from 'antd/lib/anchor';
+// import Anchor from 'antd/lib/anchor';
 import { objectToQueryString } from '../utils/useGiphyApi'
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
@@ -43,7 +43,7 @@ function GiphyResults({ data, pagination, pageChange, query } : ResultsProps) {
 					if (type === 'jump-next') {
 						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>>'}</Link>;
 					}
-					if (type === 'prev'){
+					if (type === 'prev') {
 						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<'}</Link>;
 					}
 					if (type === 'next') {
@@ -64,26 +64,22 @@ interface ItemProps {
 	images: any;
 	source_tld: string;
 }
+
 function GiphyItem({ title, ...extra } : ItemProps) {
 	const { url, width, height } = extra.images.fixed_width;
 
 	return (
-		<Card
-			hoverable
-			style={{ width: 240, margin: '20px auto' }}
-			cover={
-				<img width={width} height={height} src={url} alt={title} />
-			}
-		>
-			<Card.Meta
-				title={title}
-				description={(
-					<Anchor>
-						<Anchor.Link href={url} title={extra.source_tld}/>
-					</Anchor>
-				)}
-			/>
-		</Card>
+		<a href={url} target="_blank">
+			<Card
+				hoverable
+				style={{ width: 240, margin: '20px auto' }}
+				cover={
+					<img width={width} height={height} src={url} alt={title} />
+				}
+			>
+				<Card.Meta title={title} />
+			</Card>
+		</a>
 	);
 }
 

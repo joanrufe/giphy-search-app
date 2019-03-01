@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import useGiphyApi from '../utils/useGiphyApi';
 import GiphyResults from './GiphyResults';
-import Input from 'antd/lib/input/';
+import Search from 'antd/lib/input/Search';
 import Form from 'antd/lib/form/';
 import Layout from 'antd/lib/layout';
 import {parse} from 'query-string';
@@ -23,22 +23,12 @@ function GiphySearch({ location = { search: ''} } = {}) {
 		...defaultQuery,
 		...parse(location.search)
 	};
-	console.log(initialQuery);
+	const [searchValue, setSearchValue] = useState('');
 	const { error, loading, data, pagination, fetchGifs, query } = useGiphyApi(initialQuery);
 
-	const searchInputRef = useRef<HTMLInputElement>(null);
-
-	useEffect(() => {
-		const current : HTMLElement | null = searchInputRef.current;
-		if(current) {
-			current.focus();
-		}
-	});
-
 	const onSubmit = (ev : React.FormEvent<HTMLFormElement>) => {
-		const { value } = searchInputRef.current || { value: '' };
 		const query : QueryModel= {
-			q: value,
+			q: searchValue,
 			offset: 0,
 			limit: initialQuery.limit
 		};
@@ -61,12 +51,15 @@ function GiphySearch({ location = { search: ''} } = {}) {
 				<Form onSubmit={onSubmit}>
 					Enter a word or phrase:
 					<Form.Item>
-						<Input.Search
+						<Search
 							autoFocus
 							enterButton
 							defaultValue={initialQuery.q}
 							onSearch={(value) => {
 								fetchGifs({q: value})
+							}}
+							onChange={evt => {
+								setSearchValue(evt.target.value)
 							}}
 						/>
 					</Form.Item>
