@@ -38,18 +38,18 @@ function GiphyResults({ data, pagination, pageChange, query } : ResultsProps) {
 				showQuickJumper
 				itemRender={(page, type) => {
 					if (type === 'jump-prev') {
-						return <Link to={`/${objectToQueryString({...query, offset: page*count})}`}>{'<<'}</Link>;
+						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<<'}</Link>;
 					}
 					if (type === 'jump-next') {
-						return <Link to={`/${objectToQueryString({...query, offset: page*count})}`}>{'>>'}</Link>;
+						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>>'}</Link>;
 					}
 					if (type === 'prev'){
-						return <Link to={`/${objectToQueryString({...query, offset: page*count})}`}>{'<'}</Link>;
+						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<'}</Link>;
 					}
 					if (type === 'next') {
-						return <Link to={`/${objectToQueryString({...query, offset: page*count})}`}>{'>'}</Link>;
+						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>'}</Link>;
 					}
-					return <Link to={`/${objectToQueryString({...query, offset: page*count})}`}>{page}</Link>;
+					return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{page}</Link>;
 				}}
 				onChange={(page) => {
 					pageChange(page*count - count)

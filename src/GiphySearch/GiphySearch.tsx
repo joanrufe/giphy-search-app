@@ -6,7 +6,6 @@ import Form from 'antd/lib/form/';
 import Layout from 'antd/lib/layout';
 import {parse} from 'query-string';
 import QueryModel from '../utils/QueryModel'
-import { Route, RouteProps } from 'react-router';
 
 const {
   Header, Content,
@@ -55,7 +54,7 @@ function GiphySearch({ location = { search: ''} } = {}) {
 		<Layout>
 			<Header>
 				<h1 style={{color: 'white', textAlign: 'center'}}>
-					Giphy Search App
+					<a href={`${window.location.origin}${window.location.pathname}`}>Giphy Search App</a>
 				</h1>
 			</Header>
 			<Content style={{margin: '20px auto 20px auto'}}>
