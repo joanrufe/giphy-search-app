@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import QueryModel from './QueryModel';
+import { defaultQuery } from '../GiphySearch/GiphySearch';
 
 const defaultResponse = {
 	data: [],
@@ -31,21 +32,31 @@ export function objectToQueryString(obj: QueryModel | any) {
 	}, '');
 }
 
+interface QueryCallback {
+	(prevQuery: QueryModel) : QueryModel;
+}
+
 export default function useGiphyApi(initialQuery: QueryModel) {
 	const [ error, setError ] = useState(null);
 	const [ loading, setLoading ] = useState(true);
 	const [ respData, setResponseData ] = useState(null);
-  const [ query, setQuery ] = useState(initialQuery);
+	const [ query, setQuery ] = useState<QueryModel>(initialQuery);
 
-  const fetchGifs = (query : QueryModel ) => {
-    setQuery((prevQuery) => ({ ...prevQuery, ...query }));
-  }
+	const fetchGifs = (arg: QueryModel | QueryCallback) => {
+		if (typeof arg === "function") {
+			setQuery(arg);
+		}
+		setQuery((prevQuery) => ({ ...prevQuery, ...(arg || defaultQuery) }));
+	};
 
-  // Handle history and document title
-  useEffect(() => {
-    const encodedQuery = objectToQueryString(query);
-    history.pushState(encodedQuery, query.q || 'Giphy Search', encodedQuery);
-  }, [query]);
+	// Handle history and document title
+	useEffect(
+		() => {
+			const encodedQuery = objectToQueryString(query);
+			history.pushState(encodedQuery, query.q || 'Giphy Search', encodedQuery);
+		},
+		[ query ]
+	);
 
 	useEffect(
 		() => {

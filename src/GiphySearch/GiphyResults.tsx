@@ -5,13 +5,13 @@ import { objectToQueryString } from '../utils/useGiphyApi'
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import Query from '../utils/QueryModel';
+import { defaultQuery } from './GiphySearch';
 
 interface PaginationObject {
   total_count: number;
   count: number;
   offset: number;
 }
-
 
 interface ResultsProps {
 	data: Array<Object>;
@@ -22,7 +22,9 @@ interface ResultsProps {
 
 function GiphyResults({ data, pagination, pageChange, query } : ResultsProps) {
 	const { total_count, count, offset } = pagination;
-  const currentIndex = Math.floor(offset / count) + 1;
+	const defaultLimit = defaultQuery.limit || 10;
+	const currentIndex = Math.floor(offset / defaultLimit) + 1;
+	console.log(currentIndex)
 
 	return (
 		<>
@@ -32,28 +34,16 @@ function GiphyResults({ data, pagination, pageChange, query } : ResultsProps) {
 			<div className="footer">
 				<Pagination
 					current={currentIndex}
-					key={currentIndex}
-					total={total_count}
-					pageSize={count}
-					showQuickJumper
-					itemRender={(page, type) => {
-						if (type === 'jump-prev') {
-							return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<<'}</Link>;
-						}
-						if (type === 'jump-next') {
-							return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>>'}</Link>;
-						}
-						if (type === 'prev') {
-							return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'<'}</Link>;
-						}
-						if (type === 'next') {
-							return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{'>'}</Link>;
-						}
-						return <Link to={`${location.pathname}${objectToQueryString({...query, offset: page*count})}`}>{page}</Link>;
-					}}
+					size={offset.toString()}
+					key={(offset /defaultLimit)}
+					total={(total_count - defaultLimit)}
+					pageSize={defaultQuery.limit}
 					onChange={(page) => {
-						pageChange(page*count - count)
+						const newOffset = (page - 1)*defaultLimit;
+						pageChange(newOffset)
 					}}
+					showSizeChanger
+					simple
 				/>
 			</div>
 		</>
@@ -68,7 +58,7 @@ interface ItemProps {
 
 function GiphyItem({ title, ...extra } : ItemProps) {
 	const { url, width, height } = extra.images.fixed_width;
-
+	console.log(extra.images)
 	return (
 		<Card
 			style={{ width: 240, margin: '20px auto', height: 'fit-content' }}
