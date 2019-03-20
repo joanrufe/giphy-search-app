@@ -5,13 +5,13 @@ interface State {
   errorInfo: any | null;
 }
 
-export default class ErrorBoundary extends React.Component<{},State> {
-  constructor(props : any) {
+export default class ErrorBoundary extends React.Component<{}, State> {
+  constructor(props: any) {
     super(props);
     this.state = { error: null, errorInfo: null };
   }
 
-  componentDidCatch(error : any, errorInfo : any) {
+  componentDidCatch(error: any, errorInfo: any) {
     this.setState({
       error: error,
       errorInfo: errorInfo
